@@ -2,24 +2,24 @@
 {
     public class LandPolicyRater : Rater
     {
-        public LandPolicyRater(RatingEngine engine, ConsoleLogger logger)
-            : base(engine, logger) { }
+        public LandPolicyRater(IRatingUpdate ratingUpdater)
+            : base(ratingUpdater) { }
 
         public override void Rate(Policy policy)
         {
-            _logger.Log("Rating LAND policy...");
-            _logger.Log("Validating policy.");
+            Logger.Log("Rating LAND policy...");
+            Logger.Log("Validating policy.");
             if (policy.BondAmount == 0 || policy.Valuation == 0)
             {
-                _logger.Log("Land policy must specify Bond Amound and Valuation");
+                Logger.Log("Land policy must specify Bond Amound and Valuation");
                 return;
             }
             if (policy.BondAmount < 0.8m * policy.Valuation)
             {
-                _logger.Log("Insufficient bond amount.");
+                Logger.Log("Insufficient bond amount.");
                 return;
             }
-            _engine.Rating = policy.BondAmount * 0.05m;
+            _ratingUpdater.UpdateRating(policy.BondAmount * 0.05m);
         }
     }
 }
